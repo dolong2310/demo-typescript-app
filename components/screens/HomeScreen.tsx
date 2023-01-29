@@ -16,8 +16,8 @@ const PRIVATE_KEY =
     "29a502352c86bd27095184f27fea2d34602820c39cb61f44e185b2a5e3198d71";
 const ACCOUNT_ADDRESS = "0x25Dd27FbbAcE7f3CdF6F3dF59B87951fA8F853cf";
 
-let tokenList: [] = [];
-let txnList: [] = [];
+let tokenList: string[] = [];
+let txnList: any = [];
 
 const HomeScreen = () => {
     const [balance, setBalance] = useState("");
@@ -26,11 +26,11 @@ const HomeScreen = () => {
     const [tokenAddress, setTokenAddress] = useState("");
     const [amount, setAmount] = useState("");
     const [addAssetAddress, setAddAssetAddress] = useState("");
-    const [assetList, setAssetList] = useState([]);
+    const [assetList, setAssetList]: any = useState([]);
     const [activityList, setActivityList] = useState([]);
-    const [nfts, setNfts] = useState([]);
+    const [nfts, setNfts]: any = useState([]);
     const [transferType, setTransferType] = useState("matic_transfer");
-    const [detailTxn, setDetailTxn] = useState({});
+    const [detailTxn, setDetailTxn]: any = useState({});
 
     const web3 = new Web3(new Web3.providers.HttpProvider(RPC_HTTP_URL));
 
@@ -65,9 +65,9 @@ const HomeScreen = () => {
             value: Number(1000000000000000),
         });
 
-        let transaction;
+        let transaction: any;
         if (transferType === "token_transfer") {
-            const tokenContract = new web3.eth.Contract(ERC20ABI, tokenAddress);
+            const tokenContract = new web3.eth.Contract(ERC20ABI as [], tokenAddress);
             const data = tokenContract.methods
                 .transfer(receiverAddress, value)
                 .encodeABI();
@@ -100,7 +100,7 @@ const HomeScreen = () => {
         }
         console.log("transaction :>> ", transaction);
 
-        const signTxn = await web3.eth.accounts.signTransaction(
+        const signTxn: any = await web3.eth.accounts.signTransaction(
             transaction,
             PRIVATE_KEY
         );
@@ -141,13 +141,13 @@ const HomeScreen = () => {
     };
 
     const handleAddAsset = async () => {
-        const tokenContract = new web3.eth.Contract(ERC20ABI, addAssetAddress);
+        const tokenContract = new web3.eth.Contract(ERC20ABI as [], addAssetAddress);
         const balance = await tokenContract.methods
             .balanceOf(ACCOUNT_ADDRESS)
             .call();
         const tokenBalance = web3.utils.fromWei(balance.toString(), "ether");
 
-        const asset = {
+        const asset: any = {
             assetNumber: tokenList.length + 1,
             tokenAddress: addAssetAddress,
             tokenBalance: tokenBalance,
@@ -160,7 +160,7 @@ const HomeScreen = () => {
 
     const handleMintNFT = async () => {
         const contract = new web3.eth.Contract(
-            MintNftABI, // from ABI encode
+            MintNftABI as [], // from ABI encode
             "0x9aE5c1cf82aF51CBB83D9A7B1C52aF4B48E0Bb5E" // contract address
         );
         console.log("contract", contract.methods);
@@ -175,7 +175,7 @@ const HomeScreen = () => {
         const dataParams = contract.methods.mint().encodeABI();
         console.log("dataParams", dataParams);
 
-        const rawTxn = {
+        const rawTxn: any = {
             to: "0x9aE5c1cf82aF51CBB83D9A7B1C52aF4B48E0Bb5E",
             from: ACCOUNT_ADDRESS,
             gasPrice: gasPrice,
@@ -194,7 +194,7 @@ const HomeScreen = () => {
         );
         console.log("Signed Transaction:", signedTransaction);
 
-        const receipt = signedTransaction.rawTransaction
+        const receipt: any = signedTransaction.rawTransaction
             ? await web3.eth.sendSignedTransaction(
                   signedTransaction.rawTransaction
               )
@@ -214,7 +214,7 @@ const HomeScreen = () => {
 
     const handleLoadNFT = async () => {
         const contract = new web3.eth.Contract(
-            LoadNftABI, // from ABI encode
+            LoadNftABI as [], // from ABI encode
             "0x9aE5c1cf82aF51CBB83D9A7B1C52aF4B48E0Bb5E" // contract address
         );
 
@@ -231,7 +231,7 @@ const HomeScreen = () => {
             const tokenMetaData = await contract.methods
                 .tokenURI(tokenId)
                 .call();
-            setNfts((prev) => [...prev, tokenMetaData]);
+            setNfts([...nfts, tokenMetaData]);
             console.log("tokenMetaData", tokenMetaData);
         }
     };
@@ -263,7 +263,7 @@ const HomeScreen = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {assetList.map((item, idx) => (
+                        {assetList.map((item: any, idx: any) => (
                             <tr key={idx}>
                                 <td style={{ border: "1px solid white" }}>
                                     {item.tokenAddress}
@@ -358,7 +358,7 @@ const HomeScreen = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {activityList.map((item, idx) => (
+                        {activityList.map((item: any, idx: any) => (
                             <tr key={idx}>
                                 <td style={{ border: "1px solid white" }}>
                                     {item.tokenAddress}
@@ -385,7 +385,7 @@ const HomeScreen = () => {
             </div>
 
             <ul>
-                {nfts.map((item, idx) => (
+                {nfts.map((item: any, idx: any) => (
                     <li key={idx}>{item}</li>
                 ))}
             </ul>
