@@ -16,8 +16,8 @@ const PRIVATE_KEY =
     "29a502352c86bd27095184f27fea2d34602820c39cb61f44e185b2a5e3198d71";
 const ACCOUNT_ADDRESS = "0x25Dd27FbbAcE7f3CdF6F3dF59B87951fA8F853cf";
 
-let tokenList = [];
-let txnList = [];
+let tokenList: [] = [];
+let txnList: [] = [];
 
 const HomeScreen = () => {
     const [balance, setBalance] = useState("");
